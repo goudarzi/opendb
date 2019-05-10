@@ -1,17 +1,23 @@
 apiVersion: extensions/v1beta1
+kind:apiVersion: v1
+kind: Namespace
+metadata:
+  name:  opendb
+---
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: ai-k8s-basic
+  name: openapi-deployment
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: webapp
+        app: openapi-app
     spec:
       containers:
-      - name: ai-k8s-basic-container
-        image: saars/aik8sbasic_rbac:latest
+      - name: openapi-container
+        image: opendb/openapi:latest
         ports:
         - containerPort: 80
         env:
@@ -21,7 +27,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ai-k8s-basic
+  name: openapi-service
   annotations:
     service.beta.kubernetes.io/external-traffic: OnlyLocal
 spec:
@@ -30,5 +36,5 @@ spec:
     port: 80
     targetPort: 80
   selector:
-    app: webapp
+    app: openapi-app
   type: LoadBalancer
